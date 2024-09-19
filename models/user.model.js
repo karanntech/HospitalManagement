@@ -47,7 +47,7 @@ const userSchema = new mongoose.Schema({
         public_id: String,
         url: String
     }
-})
+}, {timestamps: true})
 
 userSchema.pre("save", async function (next) {
     if (!this.isModified("password")) {
