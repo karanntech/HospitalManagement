@@ -50,7 +50,32 @@ const userLogin = asyncHandler(async (req, res)=>{
     generateToken(user, "User logged In", 200, res)
 })
 
+const addNewAdmin = asyncHandler(async(req, res)=>{
+    const {firstname, lastname, email, phone, birthdate, gender, password} = req.body;
+
+    if(!firstname || !lastname || !email || !phone || !birthdate || !gender || !password){
+        throw new ApiError(400, "Please enter all fields")
+    }
+
+    const isRegistered = await User.findOne({email});
+    if(isRegistered){
+        throw new ApiError(400, "User already registered")
+    }
+
+    try {
+        await User.create({firstname, lastname, email, phone, birthdate, gender, password, role:"Admin"});
+    
+        return res
+        .status(200)
+        .json(new ApiResponse(200, "Admin registered"))
+    } catch (error) {
+        throw new ApiError(500, "Error occured while registering new admin")
+    }
+})
+
+
 export {
     userRegister,
-    userLogin
+    userLogin,
+    addNewAdmin
 }
