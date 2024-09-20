@@ -2,6 +2,7 @@ import {asyncHandler} from "../utils/asyncHandler.js";
 import {ApiError} from "../utils/apiError.js";
 import {ApiResponse} from "../utils/apiResponse.js";
 import { User } from "../models/user.model.js";
+import { generateToken } from "../utils/jwt_token.js";
 
 const userRegister = asyncHandler(async(req, res)=>{
     const {firstname, lastname, email, phone, birthdate, gender, password, role} = req.body;
@@ -19,7 +20,8 @@ const userRegister = asyncHandler(async(req, res)=>{
    try {
         await User.create({ firstname, lastname, email, phone, birthdate, gender, password, role });
 
-        return res.status(200).json(new ApiResponse(200, "User registered successfully"));
+        generateToken(user, "User registered", 200, res)
+
     } catch (error) {
     
         throw new ApiError(500, "Error registering user");
@@ -45,9 +47,7 @@ const userLogin = asyncHandler(async (req, res)=>{
         throw new ApiError(400, "Incorrect credentials")
     }
 
-    return res
-    .status(200)
-    .json(new ApiResponse(200, "User logged In"));
+    generateToken(user, "User logged In", 200, res)
 })
 
 export {
