@@ -1,5 +1,5 @@
 import express from "express";
-import { addNewAdmin, getDocInfo, getUserDetails, userLogin, userRegister } from "../controller/user.controller.js";
+import { addNewAdmin, adminLogout, getDocInfo, getUserDetails, patientLogout, userLogin, userRegister } from "../controller/user.controller.js";
 import { isAdmin, isPatient } from "../utils/auth.admin.js";
 
 
@@ -17,4 +17,7 @@ router.get("/admin/userdetail", isAdmin, getUserDetails);
 
 router.get("/patient/userdetail", isPatient, getUserDetails);
 
+//logout
+router.get("/admin/logout", isAdmin, adminLogout)
+router.get("/patient/logout", isPatient, patientLogout)
 export default router;

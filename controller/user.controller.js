@@ -89,10 +89,31 @@ const getUserDetails = asyncHandler(async(req, res)=>{
     .json(new ApiResponse(200, user, "User details fetched"))
 })
 
+const adminLogout = asyncHandler(async(req, res)=>{
+    res
+    .status(200)
+    .cookie("adminToken", null, {
+        httpOnly: true,
+        expires: new Date(Date.now())
+    })
+    .json(new ApiResponse(200, "User logged out successfully"))
+})
+
+const patientLogout = asyncHandler(async(req, res)=>{
+    res
+    .status(200)
+    .cookie("patientToken", null, {
+        httpOnly: true,
+        expires: new Date(Date.now())
+    })
+    .json(new ApiResponse(200, "User logged out successfully"))
+})
 export {
     userRegister,
     userLogin,
     addNewAdmin,
     getDocInfo,
-    getUserDetails
+    getUserDetails,
+    adminLogout,
+    patientLogout
 }
