@@ -73,9 +73,17 @@ const addNewAdmin = asyncHandler(async(req, res)=>{
     }
 })
 
+const getDocInfo = asyncHandler(async(req, res)=>{
+    const doctors = await User.find({role: "Doctor"})
+
+    return res
+    .status(200)
+    .json(new ApiResponse(200, doctors, "All Doc info fetched"))
+})
 
 export {
     userRegister,
     userLogin,
-    addNewAdmin
+    addNewAdmin,
+    getDocInfo
 }
