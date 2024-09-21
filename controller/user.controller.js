@@ -81,9 +81,18 @@ const getDocInfo = asyncHandler(async(req, res)=>{
     .json(new ApiResponse(200, doctors, "All Doc info fetched"))
 })
 
+const getUserDetails = asyncHandler(async(req, res)=>{
+    const user = req.user;
+
+    return res
+    .status(200)
+    .json(new ApiResponse(200, user, "User details fetched"))
+})
+
 export {
     userRegister,
     userLogin,
     addNewAdmin,
-    getDocInfo
+    getDocInfo,
+    getUserDetails
 }
