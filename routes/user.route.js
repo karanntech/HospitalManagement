@@ -1,5 +1,5 @@
 import express from "express";
-import { addNewAdmin, adminLogout, getDocInfo, getUserDetails, patientLogout, userLogin, userRegister } from "../controller/user.controller.js";
+import { addNewAdmin, addNewDoctor, adminLogout, getDocInfo, getUserDetails, patientLogout, userLogin, userRegister } from "../controller/user.controller.js";
 import { isAdmin, isPatient } from "../utils/auth.admin.js";
 
 
@@ -12,7 +12,9 @@ router.post("/register/admin",isAdmin, addNewAdmin)
 
 //For Doc
 router.get("/docInfo", getDocInfo)
+router.post("/doctor/new", isAdmin, addNewDoctor)
 
+//User details
 router.get("/admin/userdetail", isAdmin, getUserDetails);
 
 router.get("/patient/userdetail", isPatient, getUserDetails);

@@ -4,6 +4,8 @@ import {ApiResponse} from "../utils/apiResponse.js";
 import { User } from "../models/user.model.js";
 import { generateToken } from "../utils/jwt_token.js";
 
+import cloudinary from "cloudinary";
+
 const userRegister = asyncHandler(async(req, res)=>{
     const {firstname, lastname, email, phone, birthdate, gender, password, role} = req.body;
 
@@ -20,7 +22,7 @@ const userRegister = asyncHandler(async(req, res)=>{
    try {
         await User.create({ firstname, lastname, email, phone, birthdate, gender, password, role });
 
-        generateToken(user, "User registered", 200, res)
+        generateToken(user, "User registered", 201, res)
 
     } catch (error) {
     
@@ -67,7 +69,7 @@ const addNewAdmin = asyncHandler(async(req, res)=>{
     
         return res
         .status(200)
-        .json(new ApiResponse(200, "Admin registered"))
+        .json(new ApiResponse(201, "Admin registered"))
     } catch (error) {
         throw new ApiError(500, "Error occured while registering new admin")
     }
@@ -108,6 +110,50 @@ const patientLogout = asyncHandler(async(req, res)=>{
     })
     .json(new ApiResponse(200, "User logged out successfully"))
 })
+
+//Doctor Info.
+
+const addNewDoctor = asyncHandler(async(req, res)=>{
+    if(!req.files || Object.keys(req.files).length === 0){
+        throw new ApiError(400, "Doctor avatar required")
+    }
+
+    const {docAvatar} = req.files;
+    const allowedFormats = ["image/png", "image/jpeg"]
+
+    if(!allowedFormats.includes(docAvatar.mimetype)){
+        throw new ApiError(400, "Image should be in png or jpeg format")
+    }
+    const {firstname, lastname, email, phone, birthdate, gender, password, doctorDepart} = req.body;
+
+    if(!firstname || !lastname || !email || !phone || !birthdate || !gender || !password || !doctorDepart){
+        throw new ApiError(400, "Please enter all fields")
+    }
+
+    const isRegistered = await User.findOne({email});
+    if(isRegistered){
+        throw new ApiError(400, `${isRegistered.role} already registered with this email`)
+    }
+
+    const cloudinaryResponse = await cloudinary.uploader.upload(docAvatar.tempFilePath)
+
+    if(!cloudinaryResponse){
+        console.log(cloudinaryResponse.error)
+        throw new ApiError(500, "Error occured while uploading avatar")
+    }
+
+    const doctor = await User.create({
+        firstname, lastname, email, phone, birthdate, gender, password, doctorDepart, role: "Doctor", docAvatar:{
+            public_id: cloudinaryResponse.public_id,
+            url: cloudinaryResponse.secure_url
+        }
+    })
+
+    return res
+    .status(201)
+    .json(new ApiResponse(201, "New Doctor registered"))
+})
+
 export {
     userRegister,
     userLogin,
@@ -115,5 +161,6 @@ export {
     getDocInfo,
     getUserDetails,
     adminLogout,
-    patientLogout
+    patientLogout,
+    addNewDoctor
 }
