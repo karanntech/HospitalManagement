@@ -94,7 +94,7 @@ const getUserDetails = asyncHandler(async(req, res)=>{
 const adminLogout = asyncHandler(async(req, res)=>{
     res
     .status(200)
-    .cookie("adminToken", null, {
+    .cookie("adminToken", "", {
         httpOnly: true,
         expires: new Date(Date.now())
     })
@@ -104,7 +104,7 @@ const adminLogout = asyncHandler(async(req, res)=>{
 const patientLogout = asyncHandler(async(req, res)=>{
     res
     .status(200)
-    .cookie("patientToken", null, {
+    .cookie("patientToken", "", {
         httpOnly: true,
         expires: new Date(Date.now())
     })
@@ -119,7 +119,7 @@ const addNewDoctor = asyncHandler(async(req, res)=>{
     }
 
     const {docAvatar} = req.files;
-    const allowedFormats = ["image/png", "image/jpeg"]
+    const allowedFormats = ["image/png", "image/jpeg", "image/jpg"]
 
     if(!allowedFormats.includes(docAvatar.mimetype)){
         throw new ApiError(400, "Image should be in png or jpeg format")
@@ -151,7 +151,7 @@ const addNewDoctor = asyncHandler(async(req, res)=>{
 
     return res
     .status(201)
-    .json(new ApiResponse(201, "New Doctor registered"))
+    .json(new ApiResponse(201, doctor, "New Doctor registered"))
 })
 
 export {
