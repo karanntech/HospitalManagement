@@ -7,6 +7,8 @@ import { dbConnection } from "./database/db.connection.js";
 import messageRouter from "./routes/message.route.js";
 import { errorHandler } from "./utils/apiError.js";
 import userRouter from "./routes/user.route.js";
+import appointmentRouter from "./routes/appointment.route.js";
+
 
 const app = express();
 
@@ -39,7 +41,7 @@ app.use(fileUpload({
 //Routes
 app.use("/api/v1/message", messageRouter)
 app.use("/api/v1/user", userRouter)
-
+app.use("/api/v1/appointment", appointmentRouter)
 
 
 dbConnection();
