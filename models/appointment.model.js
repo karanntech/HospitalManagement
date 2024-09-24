@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { User } from "./user.model";
+import { User } from "./user.model.js";
 
 const appointmentSchema = new mongoose.Schema({
     firstname: {
@@ -36,12 +36,18 @@ const appointmentSchema = new mongoose.Schema({
         required: true
     },
     docName: {
-        type: String,
-        required: true
-    },
+        firstname: {
+          type: String,
+          required: true,
+        },
+        lastname: {
+          type: String,
+          required: true,
+        },
+      },
     hasVisited: {
         type: Boolean,
-        required: true
+        default: false
     },
     address:{
         type: String,
