@@ -83,8 +83,27 @@ const getAllAppointment = asyncHandler(async(req, res)=>{
   .json(new ApiResponse(200, appointments, "All appointments fetched"))
 })
 
+const updateAppointmentStatus = asyncHandler(async(req, res)=>{
+  const {id} = req.params;
+
+  let appointment = await Appointment.findById(id)
+
+  if(!appointment){
+    throw new ApiError(404, "Appointment not found")
+  }
+  appointment = await Appointment.findByIdAndUpdate(id, req.body, {
+    new: true
+  });
+
+  return res
+  .status(204)
+  .json(new ApiResponse(204, appointment, "Appointment updated"))
+})
+
+
 
 export{
     createAppointment,
-    getAllAppointment
+    getAllAppointment,
+    updateAppointmentStatus
 }
