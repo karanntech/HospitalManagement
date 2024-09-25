@@ -71,6 +71,20 @@ const createAppointment = asyncHandler(async(req, res)=>{
       .json(new ApiResponse(200, "Appointment sent"))
 })
 
+const getAllAppointment = asyncHandler(async(req, res)=>{
+  const appointments = await Appointment.find();
+
+  if(appointments.length === 0){
+    throw new ApiError(404, "No Appointments")
+  }
+
+  return res
+  .status(200)
+  .json(new ApiResponse(200, appointments, "All appointments fetched"))
+})
+
+
 export{
-    createAppointment
+    createAppointment,
+    getAllAppointment
 }
