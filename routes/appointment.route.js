@@ -1,5 +1,5 @@
 import express from "express";
-import { createAppointment, getAllAppointment, updateAppointmentStatus } from "../controller/appointment.controller.js";
+import { createAppointment, deleteAppointment, getAllAppointment, updateAppointmentStatus } from "../controller/appointment.controller.js";
 import {isPatient, isAdmin} from "../utils/auth.admin.js";
 
 
@@ -11,4 +11,5 @@ router.get("/getall", isAdmin, getAllAppointment)
 
 router.put("/update/:id", isAdmin, updateAppointmentStatus)
 
+router.delete("/delete/:id", isAdmin, deleteAppointment)
 export default router;

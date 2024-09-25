@@ -100,10 +100,27 @@ const updateAppointmentStatus = asyncHandler(async(req, res)=>{
   .json(new ApiResponse(204, appointment, "Appointment updated"))
 })
 
+const deleteAppointment = asyncHandler(async(req, res)=>{
+  const {id} = req.params;
 
+  if(!id){
+    throw new ApiError(404, "Invalid Id")
+  }
+
+  let deleteAppoint = await Appointment.findByIdAndDelete(id);
+
+  if(!deleteAppoint){
+    throw new ApiError(400, "Appointment not found or deleted")
+  }
+
+  return res
+  .status(200)
+  .json(new ApiResponse(200, deleteAppoint, "Appointment deleted successfully"))
+})
 
 export{
     createAppointment,
     getAllAppointment,
-    updateAppointmentStatus
+    updateAppointmentStatus,
+    deleteAppointment
 }
