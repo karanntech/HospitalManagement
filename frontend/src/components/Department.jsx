@@ -44,7 +44,6 @@ const Department = () => {
 
   const responsive = {
     extraLarge: {
-      // the naming can be any, depends on you.
       breakpoint: { max: 3000, min: 1324 },
       items: 4,
       slidesToSlide: 1
